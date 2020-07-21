@@ -61,7 +61,9 @@ class LocallyLinearEmbedding(StaticGraphEmbedding):
         normalize(A, norm='l1', axis=1, copy=False)
         I_n = sp.eye(len(graph.nodes))
         I_min_A = I_n - A
-        u, s, vt = lg.svds(I_min_A, k=self._d + 1, which='SM')
+        # In scipy.sparse.linalg maxiter defaults to num_nodes * 10, but in testing this sometimes isn't enough which
+        # crashes instead of settling on whatever eigenvectors are at after maxiters
+        u, s, vt = lg.svds(I_min_A, k=self._d + 1, which='SM', maxiter=(graph.number_of_nodes() * 60))
         t2 = time()
         self._X = vt.T
         self._X = self._X[:, 1:]

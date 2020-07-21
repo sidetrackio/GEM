@@ -73,7 +73,7 @@ class HOPE(StaticGraphEmbedding):
 
         p_d_p_t = np.dot(u, np.dot(np.diag(s), vt))
         eig_err = np.linalg.norm(p_d_p_t - S)
-        print('SVD error (low rank): %f' % eig_err)
+        # print('SVD error (low rank): %f' % eig_err)
         return self._X, (t2 - t1)
 
     def get_embedding(self):

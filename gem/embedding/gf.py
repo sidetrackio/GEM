@@ -140,12 +140,12 @@ class GraphFactorization(StaticGraphEmbedding):
         for iter_id in range(self._max_iter):
             if not iter_id % self._print_step:
                 [f1, f2, f] = self._get_f_value(graph)
-                print('\t\tIter id: %d, Objective: %g, f1: %g, f2: %g' % (
-                    iter_id,
-                    f,
-                    f1,
-                    f2
-                ))
+                # print('\t\tIter id: %d, Objective: %g, f1: %g, f2: %g' % (
+                #     iter_id,
+                #     f,
+                #     f1,
+                #     f2
+                # ))
             for i, j, w in graph.edges(data='weight', default=1):
                 if j <= i:
                     continue

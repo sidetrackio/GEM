@@ -65,7 +65,10 @@ class HOPE(StaticGraphEmbedding):
         M_l = self._beta * A
         S = np.dot(np.linalg.inv(M_g), M_l)
 
-        u, s, vt = lg.svds(S, k=self._d // 2)
+        # In scipy.sparse.linalg maxiter defaults to num_nodes * 10, but in testing this sometimes isn't enough which
+        # crashes instead of settling on whatever eigenvectors are at after maxiters. Also, arpack was never converging
+        # for a test graph, so use lobpcg
+        u, s, vt = lg.svds(S, k=self._d // 2, maxiter=(graph.number_of_nodes() * 1000), solver='lobpcg')
         X1 = np.dot(u, np.diag(np.sqrt(s)))
         X2 = np.dot(vt.T, np.diag(np.sqrt(s)))
         t2 = time()

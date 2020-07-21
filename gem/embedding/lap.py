@@ -57,7 +57,10 @@ class LaplacianEigenmaps(StaticGraphEmbedding):
         t1 = time()
         L_sym = nx.normalized_laplacian_matrix(graph)
 
-        w, v = lg.eigs(L_sym, k=self._d + 1, which='SM')
+        k = self._d + 1
+        # We hit this error message https://stackoverflow.com/questions/18436667/python-scipy-sparse-matrix-svd-with-error-arpack-error-3-no-shifts-could-be-app
+        # so we are increasing ncv accordingly
+        w, v = lg.eigs(L_sym, k=k, which='SM', ncv=4 * k)
         idx = np.argsort(w) # sort eigenvalues
         w = w[idx]
         v = v[:, idx]
